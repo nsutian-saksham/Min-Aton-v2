@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #000000;
+    background-attachment: fixed;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  ::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(10, 10, 15, 0.7);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: rgba(218, 185, 255, 0.4);
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.8),
+      0 0 0 1px rgba(218, 185, 255, 0.1),
+      inset 0 0 20px rgba(75, 1, 140, 0.3);
+  }
+
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(45deg, transparent, rgba(218, 185, 255, 0.2), rgba(75, 1, 140, 0.3), transparent);
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .glass-card:hover::after {
+    opacity: 1;
+  }
+
+  .frosted-overlay {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px) saturate(150%);
+    -webkit-backdrop-filter: blur(25px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+  }
+
+  .blueprint-grid {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .link-object {
+    width: 400px;
+    height: 160px;
+    border-radius: 80px;
+    border: 25px solid #0a0a0f;
+    box-shadow: 
+      inset 5px 5px 15px rgba(0,0,0,0.9),
+      inset -2px -2px 10px rgba(255,255,255,0.05),
+      10px 10px 30px rgba(0,0,0,0.8),
+      0 0 0 2px rgba(255,255,255,0.03);
+    position: relative;
+  }
+
+  .asymmetric-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .expand-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  .glass-card.expanded .expand-content,
+  .glass-card.group:hover .expand-content {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 1.5rem;
+  }
+
+  .high-def-border {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  
+  .neon-purple-shadow {
+    box-shadow: 0 0 30px rgba(75, 1, 140, 0.4);
+  }
+}
