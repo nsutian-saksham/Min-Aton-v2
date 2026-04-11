@@ -1,6 +1,6 @@
-# 🌌 Min-Aton v3 (Gold Edition): Editorial Futurist DFA Minimization
+# 🌌 Min-Aton v2 Editorial Futurist DFA Minimization
 
-Min-Aton v3 (Gold Edition) is a high-fidelity, interactive platform designed to visualize and perform **Deterministic Finite Automaton (DFA) Minimization** using the Myhill-Nerode Theorem. Built with a premium "Editorial Futurist" aesthetic, it combines rigorous computational theory with state-of-the-art web design.
+Min-Aton v2 is a high-fidelity, interactive platform designed to visualize and perform **Deterministic Finite Automaton (DFA) Minimization** using the Myhill-Nerode Theorem. Built with a premium "Editorial Futurist" aesthetic, it combines rigorous computational theory with state-of-the-art web design.
 
 ![Min-Aton Branding](https://img.shields.io/badge/Aesthetic-Editorial_Futurist-purple?style=for-the-badge)
 ![Tech Stack](https://img.shields.io/badge/Stack-React_|_Framer_Motion_|_Tailwind-blueviolet?style=for-the-badge)
