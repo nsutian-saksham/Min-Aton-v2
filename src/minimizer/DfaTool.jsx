@@ -1,11 +1,13 @@
 import { useState, useCallback, useMemo, useEffect, createContext, useContext, memo } from "react";
-import { Sun, Moon, Edit3, History, TrendingDown, Trash2, CheckCircle2 } from 'lucide-react';
+import { Sun, Moon, Edit3, History, TrendingDown, Trash2, CheckCircle2, Home } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import "./DfaTool.css";
 
 // ─── Theme Context ────────────────────────────────────────────────────────────
 const ThemeContext = createContext();
 const ThemeProvider = ({ children }) => {
   const [theme, setThemeState] = useState(() => {
-    try { return localStorage.getItem("color-theme") || "light"; } catch { return "light"; }
+    try { return localStorage.getItem("color-theme") || "dark"; } catch { return "dark"; }
   });
   const setTheme = (t) => {
     setThemeState(t);
@@ -70,8 +72,9 @@ const useDFA = () => {
 
   const toggleDead = (nodeId) => {
     setNodes((nds) => nds.map((n) => n.id === nodeId ? { ...n, data: { ...n.data, isDead: !n.data.isDead, isFinal: false } } : n));
-    // If setting to dead, point all outgoing edges to self
-    const isNowDead = !nodes.find(n => n.id === nodeId).data.isDead;
+    const node = nodes.find(n => n.id === nodeId);
+    if (!node) return;
+    const isNowDead = !node.data.isDead;
     if (isNowDead) {
       setEdges(eds => {
         const filtered = eds.filter(e => e.source !== nodeId);
@@ -341,8 +344,8 @@ const useMinimization = (propNodes, propEdges, alphabet) => {
   const reductionPercentage = useMemo(() => {
     if (currentStep < 0) return 0;
     if (!minimizedDFA) return Math.min((markedPairs.size / (pairs.length || 1)) * 40, 40);
-    return Math.floor(((propNodes.length - minimizedDFA.states.length) / Math.max(propNodes.length, 1)) * 100);
-  }, [currentStep, minimizedDFA, propNodes, pairs, markedPairs]);
+    return Math.floor(((nodes.length - minimizedDFA.states.length) / Math.max(nodes.length, 1)) * 100);
+  }, [currentStep, minimizedDFA, nodes, pairs, markedPairs]);
 
   const getMinPairKey = (p1, p2) => [p1, p2].sort().join("-");
   const minimizedStaircase = useMemo(() => {
@@ -385,7 +388,6 @@ const useMinimization = (propNodes, propEdges, alphabet) => {
 
 // ─── SVG Canvas ───────────────────────────────────────────────────────────────
 const DFACanvas = ({ nodes, edges, onNodeClick, isAlgorithmMode, highlightedNodes, evaluatingNodes, isDark, isComplete, theme }) => {
-  const isEditorial = theme === "editorial";
   const [dragging, setDragging] = useState(null);
   const [positions, setPositions] = useState({});
 
@@ -630,11 +632,11 @@ const TransitionTable = ({ nodes, edges, alphabet, setEdges, isAlgorithmMode, ad
     <div style={{ borderRadius: 20, border: `1px solid ${borderCol}`, overflow: "hidden", background: bg, backdropFilter: "blur(10px)" }}>
       <div style={{ padding: "14px 20px", borderBottom: `1px solid ${borderCol}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span style={{ fontWeight: 700, fontSize: 15, color: textCol }}>Transition Delta Table</span>
+        {!isAlgorithmMode && (
         <div style={{ display: "flex", gap: 8 }}>
-          {!isAlgorithmMode && (
             <button onClick={addAlphabet} style={{ fontSize: 11, padding: "5px 12px", borderRadius: 8, border: "none", background: isDark ? "rgba(218,185,255,0.15)" : "rgba(218,185,255,0.1)", color: isDark ? "#dab9ff" : "#dab9ff", fontWeight: 700, cursor: "pointer" }}>+ Symbol</button>
-          )}
         </div>
+        )}
       </div>
       <div style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -798,7 +800,7 @@ const LogicWalkthrough = ({ currentStep, reasoning, isAlgorithmMode, isDark, the
                         <span style={{ fontSize: 14 }}>➔</span>
                         <span style={{ fontWeight: 400 }}>{e.tgt}</span>
                         <span style={{ color: e.status === "Marked" ? "#ef4444" : (isDark ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"), fontWeight: e.status === "Marked" ? 700 : 300, fontSize: 11, textTransform: "uppercase" }}>
-                          ({e.status})
+                           ({e.status})
                         </span>
                      </div>
                   ))}
@@ -846,6 +848,7 @@ const ComplexityReduction = ({ reduction, isDark, theme }) => {
 
 // ─── Top Nav ──────────────────────────────────────────────────────────────────
 const TopNavBar = ({ toggleSidebar, isDark, setTheme, theme }) => {
+  const navigate = useNavigate();
   const bg = isDark ? "rgba(10,10,15,0.85)" : "rgba(249,234,225,0.85)";
   const border = isDark ? "rgba(218,185,255,0.15)" : "rgba(125,79,80,0.1)";
   const accent = isDark ? "#dab9ff" : lightTheme.primary;
@@ -855,9 +858,12 @@ const TopNavBar = ({ toggleSidebar, isDark, setTheme, theme }) => {
     <nav style={{ position: "fixed", top: 0, width: "100%", zIndex: 50, background: bg, backdropFilter: "blur(20px)", borderBottom: `1px solid ${border}`, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 28px", height: 60 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
         <button onClick={toggleSidebar} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 20, color: isDark ? "rgba(255,255,255,0.5)" : lightTheme.primary, padding: 4 }}>☰</button>
-        <span style={{ fontSize: 20, fontWeight: 300, color: accent, letterSpacing: "-0.04em" }}>Min-Aton {isDark && <span style={{fontSize:10, padding:"2px 6px", background:"rgba(218,185,255,0.1)", borderRadius:4, marginLeft:8}}>v3.0</span>}</span>
+        <span style={{ fontSize: 20, fontWeight: 300, color: accent, letterSpacing: "-0.04em", cursor: "pointer" }} onClick={() => navigate("/")}>Min-Aton {isDark && <span style={{fontSize:10, padding:"2px 6px", background:"rgba(218,185,255,0.1)", borderRadius:4, marginLeft:8}}>v3.0</span>}</span>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <button onClick={() => navigate("/")} style={{ background: "none", border: "none", cursor: "pointer", color: accent, display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+          <Home size={16} /> Home
+        </button>
         <button onClick={() => setTheme(nextTheme)} title={`Switch to ${nextTheme} mode`} style={{ background: "none", border: "none", cursor: "pointer", color: isDark ? "rgba(255,255,255,0.6)" : lightTheme.primary, display: "flex", alignItems: "center" }}>
           {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
         </button>
@@ -954,7 +960,7 @@ const AlgorithmHistory = ({ stepHistory, isDark, theme }) => {
 };
 
 // ─── Main App ─────────────────────────────────────────────────────────────────
-function AppInner() {
+function DfaToolInner() {
   const [sidebarMin, setSidebarMin] = useState(false);
   const [sidebarTab, setSidebarTab] = useState("editor");
   const [showMinimizedStaircase, setShowMinimizedStaircase] = useState(false);
@@ -972,14 +978,13 @@ function AppInner() {
     else setShowMinimizedStaircase(false);
   }, [isComplete]);
 
-  // Auto-start iterative verification after DOM flush
   useEffect(() => {
     if (autoVerify && minStep === -1 && workingNodes.length > 0) {
       const t = setTimeout(() => {
         setMinStep(0);
         startMinimization();
         setAutoVerify(false);
-      }, 500); // Small delay so the user experiences the graphical 'snap' to the new DFA
+      }, 500); 
       return () => clearTimeout(t);
     }
   }, [autoVerify, minStep, workingNodes.length, startMinimization, setMinStep]);
@@ -1021,7 +1026,6 @@ function AppInner() {
     return workingNodes.filter((n) => textTarget.includes(`{${n.id}`) || textTarget.includes(`, ${n.id}}`) || textTarget.includes(` ${n.id} `)).map((n) => n.id);
   }, [workingNodes, reasoning, isAlgorithmMode, isComplete]);
 
-  // Nodes currently being compared in the iteration
   const evaluatingNodes = useMemo(() => {
     if (!evaluatingPair || isComplete) return [];
     return evaluatingPair.split("|");
@@ -1053,7 +1057,7 @@ function AppInner() {
   const accent = isDark ? "#dab9ff" : "#8B454A";
 
   return (
-    <div style={{ minHeight: "100vh", background: bg, color: isDark ? "#fff" : "#333", fontFamily: '"Space Grotesk", sans-serif', transition: "background 0.3s, color 0.3s" }}>
+    <div style={{ minHeight: "100vh", background: bg, color: isDark ? "#fff" : "#333", fontFamily: '"Space Grotesk", sans-serif', transition: "background 0.3s, color 0.3s", position: "relative" }}>
       <TopNavBar toggleSidebar={() => setSidebarMin(!sidebarMin)} isDark={isDark} theme={theme} setTheme={setTheme} />
       <SideNavBar isMinimized={sidebarMin} resetMachine={resetMachine} isDark={isDark} sidebarTab={sidebarTab} setSidebarTab={setSidebarTab} theme={theme} />
 
@@ -1128,10 +1132,10 @@ function AppInner() {
   );
 }
 
-export default function App() {
+export default function DfaTool() {
   return (
     <ThemeProvider>
-      <AppInner />
+      <DfaToolInner />
     </ThemeProvider>
   );
 }

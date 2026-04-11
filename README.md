@@ -5,21 +5,15 @@ Min-Aton v2 is a high-fidelity, interactive platform designed to visualize and p
 ![Min-Aton Branding](https://img.shields.io/badge/Aesthetic-Editorial_Futurist-purple?style=for-the-badge)
 ![Tech Stack](https://img.shields.io/badge/Stack-React_|_Framer_Motion_|_Tailwind-blueviolet?style=for-the-badge)
 
-## 📁 Project Structure
+## ✨ Features
 
-The ecosystem is divided into two primary modules:
-
-### 1. [Concord Landing & Algo Docs](./concord-landing)
-The central hub for theoretical documentation and system architecture.
-- **Interactive Walkthrough**: A pre-computed example that steps through partitioning, base checks, and propagation.
-- **Minimality Verification**: A final phase that re-applies the algorithm to the result to mathematically prove irreducibility.
-- **Glassmorphic UI**: High-contrast, interactive background particles and smooth, centered scrolling.
-
-### 2. [DFA Minimizer Tool](./dfa-minimizer)
-A functional utility for creating and optimizing custom DFAs.
-- **Dynamic Builder**: Add states, define transitions, and mark final/dead states via an intuitive table-filling interface.
-- **Automated Minimization**: Runs the partitioning algorithm in real-time with a live "Staircase Grid" visualization.
-- **Logic Journal**: A terminal-style log explaining every marking decision throughout the process.
+- **Unified Platform**: Integration of theoretical documentation and the functional minimizer tool in a single-page application.
+- **Interactive DFA Tool**: 
+  - Dynamic Builder: Add states, define transitions, and mark final/dead states via an intuitive interface.
+  - Automated Minimization: Real-time Myhill-Nerode partitioning with live "Staircase Grid" visualization.
+  - Logic Journal: Detailed step-by-step reasoning for every state equivalence decision.
+- **Algo Docs**: Comprehensive high-definition walkthrough of the Myhill-Nerode partitioning algorithm.
+- **Premium UI**: Glassmorphic components, interactive background particles, and smooth transitions.
 
 ## 🚀 Getting Started
 
@@ -35,39 +29,31 @@ A functional utility for creating and optimizing custom DFAs.
    cd Min-Aton-v2
    ```
 
-2. Install dependencies for both projects:
+2. Install dependencies:
    ```bash
-   # Install Landing Page dependencies
-   cd concord-landing
-   npm install
-
-   # Install Minimizer dependencies
-   cd ../dfa-minimizer
    npm install
    ```
 
-### Running Locally
-
-To run the full suite, open two terminal tabs:
-
-**Tab 1 (Landing Page):**
-```bash
-cd concord-landing
-npm run dev
-```
-
-**Tab 2 (Minimizer Tool):**
-```bash
-cd dfa-minimizer
-npm run dev
-```
+3. Run locally:
+   ```bash
+   npm run dev
+   ```
 
 ## 🛠️ Technology Stack
-- **Framework**: React.js
+
+- **Framework**: React.js 19
+- **Routing**: React Router 7
 - **Animations**: Framer Motion
-- **Styling**: Tailwind CSS / Vanilla CSS
-- **Icons**: Lucide React / React Icons
-- **Theory**: Myhill-Nerode Table-Filling Algorithm
+- **Styling**: Tailwind CSS & Vanilla CSS
+- **Icons**: Lucide React & React Icons
+- **Deployment**: Optimized for Vercel
+
+## 📂 Project Structure
+
+- `/src/App.jsx`: Main routing and Landing Page logic.
+- `/src/AlgoDocs.jsx`: Documentation module.
+- `/src/minimizer/DfaTool.jsx`: The core DFA optimization engine.
+- `/src/assets/`: Unified asset store.
 
 ## 👤 Author
 **HARSH KUMAR | 2024UCS1725**

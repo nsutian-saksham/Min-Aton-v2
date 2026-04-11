@@ -4,6 +4,7 @@ import { Sunrise, Sun, Sunset, Moon } from 'lucide-react';
 import { motion, useScroll, useSpring, useTransform, useMotionValue, AnimatePresence, useMotionValueEvent } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import AlgoDocs from './AlgoDocs';
+import DfaTool from './minimizer/DfaTool';
 
 const AnimatedDFA = () => {
   const transitionProps = { duration: 1.5, delay: 1.5, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", repeatDelay: 2 };
@@ -376,7 +377,7 @@ const LandingPage = () => {
                                 <h1 className="text-6xl md:text-7xl font-bold tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-white via-white/70 to-white/40">DFA Minimizer</h1>
                                 <div className="expand-content flex gap-4 w-64 mt-8 pointer-events-auto" onClick={e => e.stopPropagation()}>
                                     <button onClick={(e) => scrollToCenter(e, 'feature-dfa')} className="flex-1 py-3 bg-white/5 border border-white/10 rounded-full text-[10px] uppercase tracking-widest font-bold no-underline text-center flex items-center justify-center">Info</button>
-                                    <button onClick={() => window.open('http://localhost:5176', '_blank')} className="flex-1 py-3 bg-secondary text-black rounded-full text-[10px] uppercase tracking-widest font-bold shadow-lg shadow-[#dab9ff]/20">Use Tool</button>
+                                    <button onClick={() => navigate('/tool')} className="flex-1 py-3 bg-secondary text-black rounded-full text-[10px] uppercase tracking-widest font-bold shadow-lg shadow-[#dab9ff]/20">Use Tool</button>
                                 </div>
                             </div>
                         </ExpandableCard>
@@ -430,7 +431,7 @@ const LandingPage = () => {
                                 Our minimization engine utilizes the MyHill-Nerode Theorem through an interactive table-filling approach to identify and merge indistinguishable states, producing a minimal Deterministic Finite Automaton with absolute precision.
                             </p>
                             <div className="flex">
-                                <button onClick={() => window.open('http://localhost:5176', '_blank')} className="bg-secondary text-black px-10 py-4 rounded-full font-headline font-black uppercase tracking-widest text-sm hover:scale-105 transition-all shadow-[0_15px_45px_rgba(218,185,255,0.3)]">Try It Out</button>
+                                <button onClick={() => navigate('/tool')} className="bg-secondary text-black px-10 py-4 rounded-full font-headline font-black uppercase tracking-widest text-sm hover:scale-105 transition-all shadow-[0_15px_45px_rgba(218,185,255,0.3)]">Try It Out</button>
                             </div>
                         </div>
                     </div>
@@ -522,6 +523,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/docs" element={<AlgoDocs />} />
+                <Route path="/tool" element={<DfaTool />} />
             </Routes>
         </Router>
     );
